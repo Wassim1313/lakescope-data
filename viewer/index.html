@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>LakeScope 3-D</title>
+<meta name="description" content="3-D lake view: terrain, lake bed depth and today's fishing spots.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14212b;--muted:#5d6b76;--card:rgba(255,255,255,.86);--line:rgba(20,33,43,.08);--accent:#0f6fa8;--pin:#f2a516;--bg1:#e8eef2;--bg2:#c9d6de;--shadow:0 6px 24px rgba(16,32,46,.16)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8eef2;--muted:#9fb0bc;--card:rgba(18,28,36,.82);--line:rgba(255,255,255,.08);--accent:#5cb6ea;--bg1:#1a2630;--bg2:#0e161c;--shadow:0 6px 24px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--ink:#e8eef2;--muted:#9fb0bc;--card:rgba(18,28,36,.82);--line:rgba(255,255,255,.08);--accent:#5cb6ea;--bg1:#1a2630;--bg2:#0e161c;--shadow:0 6px 24px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:linear-gradient(180deg,var(--bg1),var(--bg2));font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.card{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;right:12px;max-width:440px;margin:0 auto;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:18px;padding:14px 16px 12px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.card h1{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.card h1 small{font-size:13px;font-weight:500;color:var(--muted);margin-left:6px}
+.brand{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.stats{display:grid;grid-template-columns:1fr 1.35fr .75fr;gap:8px;margin-top:10px}
+.stat{border-radius:12px;background:rgba(127,150,165,.12);padding:8px 10px;min-width:0}
+.stat b{display:block;font-size:16px;font-weight:700;white-space:nowrap}
+.stat span{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.stat b .arrow{display:inline;color:var(--accent);font-size:16px;margin:0}
+.legend{position:fixed;left:12px;bottom:max(14px,env(safe-area-inset-bottom));background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:12px;padding:8px 10px 7px;box-shadow:var(--shadow);border:1px solid var(--line);font-size:11px;color:var(--muted)}
+.legend .bar{width:150px;height:8px;border-radius:4px;margin:5px 0 3px;background:linear-gradient(90deg,#c4ecef,#86cde0 12%,#4a9fcb 30%,#2569a6 55%,#153f7a 80%,#0b2550)}
+.legend .ticks{display:flex;justify-content:space-between;width:150px;font-variant-numeric:tabular-nums}
+.legend .ttl{font-weight:600;color:var(--ink)}
+.btns{position:fixed;right:12px;bottom:max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px}
+.btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.btn svg{width:20px;height:20px}
+.card,.legend,.btns{z-index:6}
+.pin{z-index:3;position:fixed;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--pin);color:#1d1400;font:700 14px/30px Inter,sans-serif;text-align:center;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.35);cursor:pointer;will-change:transform;transition:opacity .2s}
+.pin.on{background:#fff;color:#000;border-color:var(--pin);transform-origin:center}
+.pin::after{content:"";position:absolute;inset:-9px;border-radius:50%}
+.sheet{position:fixed;left:12px;right:12px;bottom:max(14px,env(safe-area-inset-bottom));max-width:460px;margin:0 auto;background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);border:1px solid var(--line);transform:translateY(140%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;gap:12px;align-items:flex-start;z-index:5}
+.sheet.show{transform:none}
+@media (max-width:899px){body.sheet-open .btns,body.sheet-open .legend{opacity:0;pointer-events:none}}
+.sheet{z-index:7!important}
+.btns{transition:opacity .2s}
+.sheet .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--pin);color:#1d1400;font-weight:700;display:grid;place-items:center}
+.sheet h2{font-size:15px;font-weight:700}
+.sheet p{font-size:13.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.sheet .dep{font-size:12px;font-weight:600;color:var(--accent);margin-top:5px}
+.sheet .x{margin-left:auto;flex:none;background:none;border:0;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0 2px}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:max(96px,calc(env(safe-area-inset-bottom) + 82px));font-size:12px;color:var(--muted);background:var(--card);padding:5px 10px;border-radius:999px;box-shadow:var(--shadow);transition:opacity .6s;pointer-events:none;white-space:nowrap}
+.loading{position:fixed;inset:0;display:grid;place-items:center;font-size:14px;color:var(--muted)}
+
+.chips{display:flex;gap:6px;overflow-x:auto;margin:10px -16px 0;padding:0 16px 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:rgba(127,150,165,.12);color:var(--ink);font:600 12.5px Inter,sans-serif;padding:7px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.plan{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.plan[hidden]{display:none}
+.plan button{border:0;background:var(--pin);color:#1d1400;font:700 12.5px Inter,sans-serif;padding:6px 12px;border-radius:999px;cursor:pointer}
+.pro{display:inline-block;font:800 10.5px Inter,sans-serif;letter-spacing:.06em;background:linear-gradient(135deg,#f6c64a,#e79a12);color:#2a1a00;padding:3px 7px;border-radius:6px;margin-left:8px;vertical-align:3px}
+.pin.locked{background:#d5dbe0;color:#55626c;border-color:#fff}
+.pin.locked svg{width:14px;height:14px;margin-top:6px}
+.pin.dim{opacity:0!important;pointer-events:none!important}
+.sheet{display:block;max-height:68vh;overflow:auto;padding:14px 16px 16px}
+.sh-head{display:flex;gap:12px;align-items:center}
+.sh-head h2{font-size:16px}
+.conf{margin-left:auto;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.conf.good{background:rgba(46,160,90,.16);color:#1f7a45}.conf.fair{background:rgba(214,150,30,.18);color:#94620a}
+.sh-why{font-size:13.5px;line-height:1.4;color:var(--muted);margin:8px 0 10px}
+.fish{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.fish span{font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(15,111,168,.1);color:var(--accent)}
+.fish span.main{background:var(--accent);color:#fff}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fact{background:rgba(127,150,165,.11);border-radius:12px;padding:8px 10px}
+.fact.wide{grid-column:1/-1}
+.fact i{display:block;font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fact b{display:block;font-size:14px;font-weight:600;margin-top:2px;line-height:1.35}
+.fact small{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.35}
+.blurred{filter:blur(6px);user-select:none;pointer-events:none}
+.lockwrap{position:relative}
+.upsell{position:absolute;inset:-14px -16px -16px;padding:18px 16px!important;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.8));display:flex;flex-direction:column;justify-content:center;gap:8px;padding:6px 2px}
+.upsell h3{font-size:16px;text-align:center}.upsell p{font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:4px}
+.opt{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:11px 12px;cursor:pointer;text-align:left;color:var(--ink);font:inherit;box-shadow:0 2px 8px rgba(16,32,46,.08)}
+.opt b{display:block;font-size:14px;white-space:nowrap}.opt span{display:block;font-size:12px;color:var(--muted)}
+.opt .pr{margin-left:auto;font-weight:700;font-size:14px;white-space:nowrap}
+.opt{position:relative}.opt.best{border:2px solid var(--pin)}
+.opt .tag{position:absolute;top:-9px;right:14px;font-size:10px;font-weight:800;background:var(--pin);color:#1d1400;border-radius:5px;padding:2px 6px}
+.opt .ic{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(127,150,165,.15)}
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--ink);color:var(--card);padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
+.btn.on{background:var(--ink);color:var(--card)}
+.legend .bar.temp{background:linear-gradient(90deg,#2c7bb6,#abd9e9,#ffffbf,#fdae61,#d7191c)}
+@media (max-width:899px){.sheet{max-height:56vh;padding:12px 14px 14px}.sh-why{font-size:13px;margin:6px 0 8px}.fact b{font-size:13.5px}.fact small{font-size:11.5px}.facts{gap:6px}.fish{margin-bottom:8px}}
+@media (max-width:899px) and (prefers-color-scheme:dark){.upsell{background:linear-gradient(180deg,rgba(18,28,36,.55),rgba(18,28,36,.85))}}
+@media (min-width:900px){.card{left:20px;right:auto;top:20px;width:400px;margin:0}.legend{left:20px;bottom:20px}.btns{right:20px;bottom:20px}.sheet{left:auto;right:84px;bottom:20px;width:440px;max-height:calc(100vh - 40px)}}
+
+.fpin{z-index:3;position:fixed;left:0;top:0;display:flex;align-items:center;gap:3px;height:30px;margin:-15px 0 0 -22px;padding:0 8px 0 5px;border-radius:999px;background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3);color:var(--ink);font:700 12.5px Inter,sans-serif;cursor:pointer;will-change:transform}
+.fpin.locked{width:30px;padding:0;justify-content:center;margin-left:-15px;background:#d5dbe0;color:#55626c}.fpin.locked svg{width:14px;height:14px}
+.fchip i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}.fchip b{margin-left:4px;font-weight:700;opacity:.85}
+.why p{font-size:13.5px;line-height:1.4;color:var(--ink);margin:6px 0}.why{margin:8px 0 10px}.pnote{font-size:12.5px;color:var(--muted);margin-top:10px}.pnote a{color:var(--accent);font-weight:700}
+.legend .bar.heat{background:linear-gradient(90deg,#2b86b0,#fff5a0 25%,#fec44f 50%,#f06c20 75%,#bd0026)}
+.probe{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:8;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:14px;padding:10px 34px 10px 12px;display:flex;gap:14px;font-size:12px;max-width:calc(100vw - 32px)}
+.probe.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+@media (max-width:899px){.probe{top:auto;bottom:max(80px,calc(env(safe-area-inset-bottom) + 70px));transform:translate(-50%,0) scale(.96)}.probe.show{transform:translate(-50%,0)}}
+.probe i{display:block;font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.probe b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap}
+.probe .x{position:absolute;right:8px;top:6px;background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer}
+.probe .bar{display:block;width:70px;height:5px;border-radius:3px;background:rgba(127,150,165,.25);margin-top:4px;overflow:hidden}.probe .bar span{display:block;height:100%;background:linear-gradient(90deg,#fec44f,#bd0026)}
+#bUnits{font:800 13px Inter,sans-serif}
+</style>
+<script type="importmap">{"imports":{"three":"./lib/three.module.js","three/addons/":"./lib/addons/"}}</script>
+</head>
+<body>
+<div class="loading" id="loading">Loading lake…</div>
+<canvas id="c"></canvas>
+<div class="card" id="card">
+  <div class="top"><h1 id="lname">Lake<small></small></h1><div class="brand">Atlas Labs</div></div>
+  <div class="stats">
+    <div class="stat"><b id="tval">–</b><span id="tsub"></span></div>
+    <div class="stat"><b id="lval">–</b><span id="lsub"></span></div>
+    <div class="stat"><b id="fval">–</b><span>full</span></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="plan" id="plan" hidden><span id="planTxt"></span><button id="planBtn">Unlock all</button></div>
+</div>
+<div class="legend" id="legend"><div class="ttl" id="lgT">Depth today</div><div class="bar" id="lgB"></div><div class="ticks" id="lgK"><span>0</span><span>50</span><span>100</span><span>150</span><span>200 ft</span></div></div>
+<div class="btns">
+  <button class="btn" id="bFish" title="Where the fish are today" aria-label="Where the fish are today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c3-5 9-6.5 14-3.5L21 5v14l-5-3.5C11 18.5 5 17 2 12z"/><circle cx="7.5" cy="11" r=".9" fill="currentColor"/></svg></button>
+  <button class="btn" id="bUnits" title="Units" aria-label="Units">ft</button>
+  <button class="btn" id="bNorth" title="Face north" aria-label="Face north"><svg id="needle" viewBox="0 0 24 24" style="width:26px;height:26px"><text x="12" y="7.2" text-anchor="middle" font-size="6.5" font-weight="700" fill="#e0533d" font-family="Inter,sans-serif">N</text><path d="M12 8.5l3.2 7.5L12 14.4 8.8 16z" fill="#e0533d"/><path d="M12 14.4l3.2 1.6L12 21l-3.2-5z" fill="currentColor" opacity=".35"/></svg></button>
+  <button class="btn" id="bTemp" title="Colour the water by temperature" aria-label="Colour the water by temperature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 11v6"/></svg></button>
+  <button class="btn" id="bWater" title="Show or hide the water" aria-label="Show or hide the water"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9c2 0 2-1.5 4.5-1.5S9.5 9 12 9s2.5-1.5 4.5-1.5S19 9 21 9M3 15c2 0 2-1.5 4.5-1.5S9.5 15 12 15s2.5-1.5 4.5-1.5S19 15 21 15"/></svg></button>
+  <button class="btn" id="bReset" title="Back to the whole lake" aria-label="Back to the whole lake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6"/></svg></button>
+</div>
+<div class="hint" id="hint">Drag to turn · pinch to zoom · tap the lake for depth</div>
+<div class="sheet" id="sheet"></div>
+<div class="probe" id="probe" role="status"></div>
+<div class="toast" id="toast"></div>
+<script>window.META=null;window.CONT=null;</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// ---------- load this lake's data (shared viewer for the app WebView and the website) ----------
+const QS = new URLSearchParams(location.search);
+const LID = QS.get('lake') || 'lake_travis_tx';
+const BASE = QS.get('base') || new URL('../', location.href).href;
+const STAMP = QS.get('v') ? '?v=' + encodeURIComponent(QS.get('v')) : '';
+const J = await (await fetch(`${BASE}3d/${LID}.json${STAMP}`)).json();
+const M = J.meta, CONT = J.cont;
+const post = msg => { try { if (window.ReactNativeWebView) window.ReactNativeWebView.postMessage(JSON.stringify(msg)); else window.parent && window.parent.postMessage(msg, '*'); } catch (e) {} };
+document.title = `${M.name} 3-D | LakeScope`;
+let dirty = true;
+const EX = 2.6;                       // vertical exaggeration
+const nx = M.nx, ny = M.ny, dx = M.dxm / 1000, dz = M.dym / 1000;
+const X = c => (c - (nx - 1) / 2) * dx, Z = r => (r - (ny - 1) / 2) * dz;
+const ftY = ft => -ft * 0.3048 / 1000 * EX;
+
+// ---------- units: US (ft, °F) or metric (m, °C); remembered; the app passes ?units=metric|us ----------
+const U = {
+  metric: (() => { const q = QS.get('units'); if (q) return q === 'metric'; try { return localStorage.getItem('ls-units') === 'metric'; } catch (e) { return false; } })(),
+  set(v) { this.metric = v; try { localStorage.setItem('ls-units', v ? 'metric' : 'us'); } catch (e) {} },
+  t(f) { return this.metric ? `${Math.round((f - 32) * 5 / 9)}°C` : `${Math.round(f)}°F`; },
+  d(ft) { const m = ft / 3.28084; return this.metric ? `${m < 10 ? m.toFixed(1) : Math.round(m)} m` : `${Math.round(ft)} ft`; },
+  band(b) { const a = Math.round(b[0] / 3.28084), c = Math.max(a + 1, Math.round(b[1] / 3.28084)); return this.metric ? `${a}–${c} m` : `${b[0]}–${b[1]} ft`; },
+  inch(n) { return this.metric ? `${Math.round(n * 2.54)} cm` : `${Math.round(n)} in`; },
+  depthTicks() { return this.metric ? '<span>0</span><span>15</span><span>30</span><span>46</span><span>61 m</span>' : '<span>0</span><span>50</span><span>100</span><span>150</span><span>200 ft</span>'; },
+  text(s) { if (!this.metric) return s; return s.replace(/(\d+)–(\d+) ft/g, (m, a, b) => this.band([+a, +b])).replace(/(\d+(?:\.\d+)?)°F/g, (m, a) => this.t(+a)).replace(/(\d+) ft/g, (m, a) => this.d(+a)).replace(/(\d+) mph/g, (m, a) => `${Math.round(a * 1.609)} km/h`); },
+};
+const FISH_P = fetch(`${BASE}fish/${LID}.json${STAMP}`).then(r => r.ok ? r.json() : null).catch(() => null);
+
+// ---------- top card (relative wording only) ----------
+function daysBetween(a, b) { return Math.round((new Date(b) - new Date(a)) / 864e5); }
+function when(d) { return d <= 0 ? 'today' : d === 1 ? 'yesterday' : d <= 4 ? 'a few days ago' : d <= 10 ? 'about a week ago' : d <= 17 ? 'over a week ago' : 'over 2 weeks ago'; }
+const C = M.card;
+const todayISO = new Date().toISOString().slice(0, 10);
+C.tempDays = C.tempDate ? daysBetween(C.tempDate, todayISO) : null;
+if (C.tempDays != null && C.tempDays > 8) C.tempF = null;   // never show a water temperature older than 8 days
+function renderTop() {
+document.getElementById('tval').textContent = C.tempF != null ? `Water ${U.t(C.tempF)}` : 'Water –';
+document.getElementById('tsub').textContent = C.tempF != null ? when(C.tempDays) + (C.tempTrend && C.tempTrend !== 'steady' ? ` · ${C.tempTrend}` : '') : '';
+if (!C.series || C.series.length < 2) {
+  document.getElementById('lval').innerHTML = C.levelTrend ? `Level ${C.levelTrend}` : `Deepest ${U.d(M.maxDepthFt)}`;
+  document.getElementById('lsub').textContent = C.levelTrend ? 'this week' : 'today';
+  document.getElementById('fval').parentElement.style.display = C.pctFull != null ? '' : 'none';
+  if (C.pctFull != null) document.getElementById('fval').textContent = `${Math.round(C.pctFull)}%`;
+} else {
+  const s = C.series.map(p => Array.isArray(p) ? p : [p.d, p.v]), last = s[s.length - 1], prev = s[Math.max(0, s.length - 8)];
+  const diffIn = (last[1] - prev[1]) * 12, ago = when(daysBetween(prev[0], last[0]));
+  let arrow = '→', word = 'Steady';
+  if (diffIn >= 1) { arrow = '↑'; word = `Up ${U.inch(diffIn)}`; } else if (diffIn <= -1) { arrow = '↓'; word = `Down ${U.inch(-diffIn)}`; }
+  document.getElementById('lval').innerHTML = `Level <span class="arrow">${arrow}</span> ${word.toLowerCase()}`;
+  document.getElementById('lsub').textContent = `vs ${ago}`;
+  document.getElementById('fval').parentElement.style.display = C.pctFull != null ? '' : 'none';
+  if (C.pctFull != null) document.getElementById('fval').textContent = `${Math.round(C.pctFull)}%`;
+}
+
+}
+renderTop();
+// ---------- data ----------
+const bin = new Uint8Array(await (await fetch(`${BASE}${M.bin}${STAMP}`)).arrayBuffer());
+const buf = (bin[0] === 0x1f && bin[1] === 0x8b) ? await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer() : bin.buffer;
+const H = new Int16Array(buf, 0, nx * ny);
+const bits = new Uint8Array(buf, nx * ny * 2, Math.ceil(nx * ny / 8));
+const T8 = new Uint8Array(buf, nx * ny * 2 + bits_len());
+function bits_len() { return Math.ceil(nx * ny / 8); }
+const wet = new Uint8Array(nx * ny); for (let i = 0; i < nx * ny; i++) wet[i] = (bits[i >> 3] >> (7 - (i & 7))) & 1;
+
+// ---------- renderer / scene ----------
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+scene.fog = new THREE.Fog(dark ? 0x121c24 : 0xd5dfe6, 40, 90);
+const camera = new THREE.PerspectiveCamera(38, 1, 0.05, 400);
+
+// colour ramps
+function ramp(stops, t) {
+  for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) {
+    const [t0, c0] = stops[i - 1], [t1, c1] = stops[i], f = (t - t0) / (t1 - t0);
+    return [c0[0] + (c1[0] - c0[0]) * f, c0[1] + (c1[1] - c0[1]) * f, c0[2] + (c1[2] - c0[2]) * f];
+  }
+  return stops[stops.length - 1][1];
+}
+const hex = h => [(h >> 16 & 255) / 255, (h >> 8 & 255) / 255, (h & 255) / 255];
+const LAND = [[0, hex(0xd8cfa8)], [3, hex(0xb9bb8c)], [25, hex(0x98a575)], [70, hex(0x8b9468)], [120, hex(0xa49c7a)], [170, hex(0xc4b99e)], [230, hex(0xe2dccd)]];
+const BED = [[0, hex(0xc4ecef)], [25, hex(0x86cde0)], [60, hex(0x4a9fcb)], [110, hex(0x2569a6)], [165, hex(0x153f7a)], [210, hex(0x0b2550)]];
+
+// ---------- terrain ----------
+const N = nx * ny;
+const pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+const hm = i => H[i] / 10;    // metres relative to today's water line
+const sunAz = 315 * Math.PI / 180, sunAlt = 42 * Math.PI / 180;
+const Lx = Math.sin(sunAz) * Math.cos(sunAlt), Ly = Math.sin(sunAlt), Lz = -Math.cos(sunAz) * Math.cos(sunAlt);
+for (let r = 0; r < ny; r++) for (let c = 0; c < nx; c++) {
+  const i = r * nx + c, h = hm(i);
+  pos[i * 3] = X(c); pos[i * 3 + 1] = h / 1000 * EX; pos[i * 3 + 2] = Z(r);
+  const cl = Math.max(c - 1, 0), cr = Math.min(c + 1, nx - 1), ru = Math.max(r - 1, 0), rd = Math.min(r + 1, ny - 1);
+  const gx = (hm(r * nx + cr) - hm(r * nx + cl)) * EX / ((cr - cl) * M.dxm), gz = (hm(rd * nx + c) - hm(ru * nx + c)) * EX / ((rd - ru) * M.dym);
+  let nX = -gx, nY = 1, nZ = -gz; const nl = Math.hypot(nX, nY, nZ); nX /= nl; nY /= nl; nZ /= nl;
+  const hs = Math.max(0, nX * Lx + nY * Ly + nZ * Lz);
+  let rgb, shade;
+  if (wet[i]) { rgb = ramp(BED, -h * 3.28084); shade = 0.72 + 0.38 * hs; }
+  else { rgb = ramp(LAND, h); shade = 0.42 + 0.78 * hs; }
+  col[i * 3] = Math.min(1, rgb[0] * shade); col[i * 3 + 1] = Math.min(1, rgb[1] * shade); col[i * 3 + 2] = Math.min(1, rgb[2] * shade);
+}
+const idx = new Uint32Array((nx - 1) * (ny - 1) * 6); let k = 0;
+for (let r = 0; r < ny - 1; r++) for (let c = 0; c < nx - 1; c++) {
+  const a = r * nx + c, b = a + 1, d = a + nx, e = d + 1;
+  idx[k++] = a; idx[k++] = d; idx[k++] = b; idx[k++] = b; idx[k++] = d; idx[k++] = e;
+}
+const tg = new THREE.BufferGeometry();
+tg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+tg.setAttribute('color', new THREE.BufferAttribute(col, 3));
+tg.setIndex(new THREE.BufferAttribute(idx, 1));
+// colours are in sRGB, tell three
+const terrainMat = new THREE.MeshBasicMaterial({ vertexColors: true });
+for (let i = 0; i < col.length; i++) col[i] = Math.pow(col[i], 2.2);
+const terrain = new THREE.Mesh(tg, terrainMat); scene.add(terrain);
+
+// side skirts (diorama block)
+let minH = 0; for (let i = 0; i < N; i++) minH = Math.min(minH, hm(i));
+const baseY = (minH - 25) / 1000 * EX;
+{
+  const ring = [];
+  for (let c = 0; c < nx; c++) ring.push([0, c]);
+  for (let r = 1; r < ny; r++) ring.push([r, nx - 1]);
+  for (let c = nx - 2; c >= 0; c--) ring.push([ny - 1, c]);
+  for (let r = ny - 2; r > 0; r--) ring.push([r, 0]);
+  ring.push([0, 0]);
+  const p = [], cc = [], top = hex(0x6d6354), bot = hex(0x3a342c);
+  const lin = v => Math.pow(v, 2.2);
+  for (const [r, c] of ring) { const i = r * nx + c; p.push(X(c), pos[i * 3 + 1], Z(r), X(c), baseY, Z(r)); cc.push(...top.map(lin), ...bot.map(lin)); }
+  const ii = []; for (let j = 0; j < ring.length - 1; j++) { const a = j * 2; ii.push(a, a + 1, a + 2, a + 2, a + 1, a + 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(cc, 3)); g.setIndex(ii);
+  scene.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide })));
+  const bg = new THREE.PlaneGeometry(X(nx - 1) - X(0), Z(ny - 1) - Z(0)); bg.rotateX(Math.PI / 2); bg.translate(0, baseY, 0);
+  scene.add(new THREE.Mesh(bg, new THREE.MeshBasicMaterial({ color: 0x2f2a24, side: THREE.DoubleSide })));
+}
+// soft contact shadow under the block
+{
+  const cv = document.createElement('canvas'); cv.width = cv.height = 128; const g = cv.getContext('2d');
+  const grd = g.createRadialGradient(64, 64, 10, 64, 64, 64); grd.addColorStop(0, 'rgba(10,20,30,.35)'); grd.addColorStop(1, 'rgba(10,20,30,0)');
+  g.fillStyle = grd; g.fillRect(0, 0, 128, 128);
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry((X(nx - 1) - X(0)) * 1.5, (Z(ny - 1) - Z(0)) * 1.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
+  sh.rotation.x = -Math.PI / 2; sh.position.y = baseY - 0.4; scene.add(sh);
+}
+
+// ---------- contour lines on the bed ----------
+const contourGroup = new THREE.Group(); scene.add(contourGroup);
+for (const L of M.levels) {
+  const segs = [];
+  for (const line of CONT[L] || []) {
+    for (let j = 0; j + 3 < line.length; j += 2) {
+      segs.push(X(line[j]), ftY(L) + 0.004, Z(line[j + 1]), X(line[j + 2]), ftY(L) + 0.004, Z(line[j + 3]));
+    }
+  }
+  if (!segs.length) continue;
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3));
+  const major = L === 50 || L === 100;
+  contourGroup.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: major ? 0.75 : 0.42 })));
+}
+
+{
+  const segs = [];
+  for (const line of CONT.shore || []) for (let j = 0; j + 3 < line.length; j += 2) segs.push(X(line[j]), 0.003, Z(line[j + 1]), X(line[j + 2]), 0.003, Z(line[j + 3]));
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(segs, 3));
+  const sl = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xf4fbff, transparent: true, opacity: 0.85, depthWrite: false })); sl.renderOrder = 12; scene.add(sl);
+}
+// ---------- water surface at today's level ----------
+let water, waterMats;
+{
+  const p = [], ii = [], map = new Int32Array(N).fill(-1);
+  const tc = [];
+  const TP = [hex(0x2c7bb6), hex(0xabd9e9), hex(0xffffbf), hex(0xfdae61), hex(0xd7191c)].map(c => c.map(v => Math.pow(v, 2.2)));
+  const tcol = v => { const x = Math.min(0.9999, Math.max(0, (v - 1) / 254)) * 4, k = Math.floor(x), f = x - k; return [0, 1, 2].map(q => TP[k][q] + (TP[k + 1][q] - TP[k][q]) * f); };
+  const near = i => { if (T8[i]) return T8[i]; const r = Math.floor(i / nx), c = i % nx; for (const d of [1, -1, nx, -nx, nx + 1, nx - 1, -nx + 1, -nx - 1]) if (T8[i + d]) return T8[i + d]; return 128; };
+  const vid = i => { if (map[i] < 0) { map[i] = p.length / 3; p.push(pos[i * 3], 0, pos[i * 3 + 2]); tc.push(...tcol(near(i))); } return map[i]; };
+  for (let r = 0; r < ny - 1; r++) for (let c = 0; c < nx - 1; c++) {
+    const a = r * nx + c, b = a + 1, d = a + nx, e = d + 1;
+    if (!(wet[a] || wet[b] || wet[d] || wet[e])) continue;
+    const A = vid(a), B = vid(b), D = vid(d), E = vid(e); ii.push(A, D, B, B, D, E);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(tc, 3)); g.setIndex(ii); g.computeVertexNormals();
+  waterMats = [new THREE.MeshPhongMaterial({ color: 0x2b86b0, specular: 0xffffff, shininess: 90, transparent: true, opacity: 0.30, depthWrite: false }),
+               new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.92, depthWrite: false })];
+  water = new THREE.Mesh(g, waterMats[0]);
+  water.renderOrder = 10; scene.add(water);
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.0); sun.position.set(Lx, Ly, Lz); scene.add(sun);
+}
+
+// ---------- fishing intelligence (simple rules) ----------
+const SPECIES = [];
+{ const seen = new Set(); for (const sp of M.spots) for (const [k, v] of Object.entries(sp.per || {})) if (!seen.has(k)) { seen.add(k); SPECIES.push([k, v.name]); } }
+const SNAME = Object.fromEntries(SPECIES);
+const FIT = {}; M.spots.forEach((sp, j) => { FIT[j] = Object.fromEntries(Object.entries(sp.per || {}).map(([k, v]) => [k, v.fit])); });
+const tz = M.tz || 'America/Chicago';
+const nowParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()).map(p => [p.type, p.value]));
+const month = +nowParts.month - 1, nowMin = (+nowParts.hour % 24) * 60 + +nowParts.minute;
+function bestTime(sp) {
+  const W = (M.windows || []).slice();
+  const dawn = W.find(w => w.why.includes('sunrise')), dusk = W.find(w => w.why.includes('sunset'));
+  const say = w => w === dawn ? 'Early morning, around sunrise' : 'This evening, around sunset';
+  const moon = w => w.why.some(x => x.startsWith('moon')) ? ` — the moon ${w.why.includes('moonset') ? 'sets' : 'rises'} then too, which often helps` : '';
+  let order = (sp === 'striped' || sp === 'white_bass' || sp === 'walleye') ? [dawn, dusk] : [W.find(w => w.best) || dusk, dawn];
+  order = order.filter(Boolean);
+  const open = order.filter(w => w.end_min > nowMin);
+  if (!open.length) return { main: 'Tomorrow morning, around sunrise', sub: 'Today’s best bite has passed' };
+  const w = open[0], other = order.find(o => o !== w && o.end_min > nowMin);
+  let main = say(w) + moon(w);
+  if (sp === 'catfish' && w === dusk) main = 'This evening, from sunset on into dark' + moon(w);
+  if (w.start_min <= nowMin) main = 'Right now — ' + main.charAt(0).toLowerCase() + main.slice(1);
+  return { main, sub: other ? `Also good: ${say(other).toLowerCase()}` : '' };
+}
+function rankFor(sp) {
+  return M.spots.map((s, j) => ({ j, f: sp ? (FIT[j][sp] ?? 0) : (s.rank ?? Math.max(0, ...Object.values(FIT[j]))) }))
+    .filter(o => sp ? o.f >= 0.45 : true).sort((a, b) => b.f - a.f || a.j - b.j);
+}
+const FREE_SPOT = Math.max(0, M.spots.findIndex(s => s.free));
+let unlocked = QS.get('pro') === '1';
+window.__unlock = () => { unlocked = true; refreshPins(); if (active >= 0) openSheet(active); };
+let filter = null, order = rankFor(null);
+const isLocked = j => !unlocked && j !== FREE_SPOT;
+
+// ---------- fishing spot pins ----------
+const pins = [], pinGroup = new THREE.Group(); scene.add(pinGroup);
+const stemH = 0.45;
+const LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+M.spots.forEach((s, j) => {
+  const v = new THREE.Vector3(X(s.c), 0, Z(s.r));
+  const g = new THREE.BufferGeometry().setFromPoints([v, v.clone().setY(stemH)]);
+  const stem = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95 }));
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.06, 0.1, 32), new THREE.MeshBasicMaterial({ color: 0xf2a516, side: THREE.DoubleSide, transparent: true, opacity: 0.95, depthWrite: false }));
+  ring.rotation.x = -Math.PI / 2; ring.position.copy(v).setY(0.002); ring.renderOrder = 11; pinGroup.add(stem, ring);
+  const el = document.createElement('button'); el.className = 'pin'; el.setAttribute('aria-label', s.title);
+  el.onclick = ev => { ev.stopPropagation(); openSheet(j); };
+  document.body.appendChild(el);
+  pins.push({ el, top: v.clone().setY(stemH), s, stem, ring });
+});
+function refreshPins() {
+  order = rankFor(filter);
+  const rank = new Map(order.map((o, k) => [o.j, k + 1]));
+  pins.forEach((p, j) => {
+    const r = rank.get(j), lk = isLocked(j);
+    p.el.classList.toggle('dim', !r); p.stem.visible = p.ring.visible = !!r;
+    p.el.classList.toggle('locked', lk);
+    p.el.innerHTML = lk ? LOCK : (r || '');
+    p.ring.material.color.set(lk ? 0xc5ced5 : 0xf2a516);
+  });
+  const nOpen = order.filter(o => !isLocked(o.j)).length;
+  document.getElementById('plan').hidden = unlocked;
+  document.getElementById('planTxt').textContent = `${nOpen} of ${order.length} spots open${filter ? ' for ' + SNAME[filter].toLowerCase() : ''}`;
+  document.getElementById('lname').innerHTML = `${M.name}<small>${M.state}</small>` + (unlocked ? '<span class="pro">PRO</span>' : '');
+  dirty = true;
+}
+// species chips
+{
+  const box = document.getElementById('chips');
+  [[null, 'All fish'], ...SPECIES].forEach(([id, name]) => {
+    const b = document.createElement('button'); b.className = 'chip' + (id === filter ? ' on' : ''); b.textContent = name;
+    b.onclick = () => { filter = id; box.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b)); refreshPins(); if (active >= 0) { if (order.some(o => o.j === active)) openSheet(active); else closeSheet(); } };
+    box.appendChild(b);
+  });
+}
+const sheet = document.getElementById('sheet');
+let active = -1;
+function spotHTML(j) {
+  const s = M.spots[j], per = s.per || {};
+  const fits = Object.entries(per).map(([k, v]) => [k, v.fit]).filter(x => x[1] >= 0.45).sort((a, b) => b[1] - a[1]);
+  const sp = (filter && per[filter]) ? filter : (fits[0] || Object.entries(per)[0] || [null])[0];
+  const d = sp ? per[sp] : { lo: s.depth_lo_ft, hi: s.depth_hi_ft, bait: s.bait, t_deep: s.temp_at_depth_f, fit: 0.5 };
+  const zMid = Math.round((d.lo + d.hi) / 2), tTop = s.tempF ?? s.surface_f;
+  const strat = tTop != null && d.t_deep != null && tTop - d.t_deep >= 3;
+  const tNote = tTop == null ? '' : strat ? 'Below the warm top layer: cooler and calmer.' : 'The lake is mixed top to bottom, so fish roam many depths.';
+  const bt = bestTime(sp);
+  const conf = (d.fit >= 0.75 && (M.wind.mph ?? 0) <= 14) ? 'good' : 'fair';
+  const rank = order.findIndex(o => o.j === j) + 1;
+  const fishList = (filter && per[filter] ? [[filter, per[filter].fit], ...fits.filter(x => x[0] !== filter)] : fits).slice(0, 4);
+  return `<div class="sh-head"><div class="num">${rank || ''}</div><h2>${s.title}</h2><span class="conf ${conf}">${conf === 'good' ? 'Good chance' : 'Fair chance'}</span><button class="x" aria-label="Close" onclick="window.__close()">×</button></div>
+  <p class="sh-why">${s.why}</p>
+  <div class="fish">${fishList.map(([id], k) => `<span class="${k === 0 ? 'main' : ''}">${SNAME[id]}</span>`).join('')}</div>
+  <div class="facts">
+    <div class="fact"><i>Fish at</i><b>${U.band([d.lo, d.hi])} deep</b><small>${sp ? SNAME[sp] + ', ' : ''}today</small></div>
+    ${tTop != null ? `<div class="fact"><i>Water</i><b>${U.t(tTop)} on top</b><small>about ${U.t(d.t_deep ?? tTop)} at ${U.d(zMid)}</small></div>` : ''}
+    <div class="fact wide"><i>Best time</i><b>${bt.main}</b>${bt.sub ? `<small>${bt.sub}</small>` : ''}</div>
+    ${d.bait ? `<div class="fact wide"><i>Try this</i><b>${d.bait.charAt(0).toUpperCase() + d.bait.slice(1)}.</b><small>${tNote}</small></div>` : ''}
+  </div>`;
+}
+function upsellHTML() {
+  return `<div class="upsell">
+    <h3>Unlock every spot on ${M.name}</h3><p>Depth, bait and best time for all ${M.spots.length} spots, every day.</p>
+    <button class="opt" data-buy="video"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span><b>Watch a short video</b><span>This lake free for 24 h</span></span><span class="pr">Free</span></button>
+    <button class="opt" data-buy="lake"><span class="ic">◎</span><span><b>Lake Pass</b><span>${M.name}, all year</span></span><span class="pr">$4.99/yr</span></button>
+    <button class="opt best" data-buy="all"><span class="tag">BEST VALUE</span><span class="ic">★</span><span><b>All Lakes</b><span>Every lake in the app</span></span><span class="pr">$19.99/yr</span></button>
+  </div>`;
+}
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.opacity = 1; setTimeout(() => t.style.opacity = 0, 2200); }
+function openSheet(j) {
+  active = j;
+  if (isLocked(j)) {
+    sheet.innerHTML = `<button class="x" style="position:absolute;right:12px;top:10px;z-index:2" aria-label="Close" onclick="window.__close()">×</button><div class="lockwrap"><div class="blurred" aria-hidden="true">${spotHTML(j)}</div>${upsellHTML()}</div>`;
+    sheet.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => {
+      if (window.ReactNativeWebView) post({ buy: b.dataset.buy, lake: LID, spot: j });
+      else toast('Unlock in the LakeScope app');
+    });
+  } else sheet.innerHTML = spotHTML(j);
+  sheet.scrollTop = 0;
+  sheet.classList.add('show'); document.body.classList.add('sheet-open'); pins.forEach((p, q) => p.el.classList.toggle('on', q === j)); dirty = true;
+  requestAnimationFrame(() => bringIntoView(j));
+}
+function bringIntoView(j) {
+  const w = innerWidth, h = innerHeight, sr = sheet.getBoundingClientRect(), cb = document.getElementById('card').getBoundingClientRect().bottom;
+  const wide = w >= 900, p = pins[j].top.clone().setY(0).project(camera);
+  const px = (p.x + 1) / 2 * w, py = (1 - p.y) / 2 * h;
+  const freeR = wide ? sr.left - 20 : w, freeB = wide ? h : h - sheet.offsetHeight - 44;
+  if (px > 20 && px < freeR - 20 && py > cb + 40 && py < freeB) return;
+  const tx = wide ? Math.min(Math.max(px, 40), freeR - 60) : w / 2, ty = (cb + freeB) / 2;
+  const ray = new THREE.Raycaster(), pl = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  const hitAt = (x, y) => { ray.setFromCamera(new THREE.Vector2(x / w * 2 - 1, 1 - y / h * 2), camera); const v = new THREE.Vector3(); return ray.ray.intersectPlane(pl, v) ? v : null; };
+  const a = hitAt(px, py), b = hitAt(tx, ty); if (!a || !b) return;
+  const d = a.sub(b), t0 = performance.now(), c0 = camera.position.clone(), g0 = controls.target.clone();
+  (function step() {
+    const k = Math.min(1, (performance.now() - t0) / 450), e = 1 - Math.pow(1 - k, 3);
+    camera.position.copy(c0).addScaledVector(d, e); controls.target.copy(g0).addScaledVector(d, e); controls.update(); dirty = true;
+    if (k < 1) requestAnimationFrame(step);
+  })();
+}
+function closeSheet() { sheet.classList.remove('show'); document.body.classList.remove('sheet-open'); active = -1; pins.forEach(p => p.el.classList.remove('on')); }
+window.__close = closeSheet;
+document.getElementById('planBtn').onclick = () => openSheet(order.find(o => isLocked(o.j))?.j ?? 0);
+refreshPins();
+
+// ---------- controls + fitted start view ----------
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.maxPolarAngle = 1.38; controls.minDistance = 1.5; controls.maxDistance = 80;
+controls.screenSpacePanning = false; controls.rotateSpeed = 0.6; controls.zoomSpeed = 0.9;
+controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+
+// wet-cell sample for fitting + principal axis
+const samp = []; for (let i = 0; i < N; i += 7) if (wet[i]) samp.push(new THREE.Vector3(pos[i * 3], 0, pos[i * 3 + 2]));
+let mx = 0, mz = 0; samp.forEach(v => { mx += v.x; mz += v.z; }); mx /= samp.length; mz /= samp.length;
+let sxx = 0, szz = 0, sxz = 0; samp.forEach(v => { const a = v.x - mx, b = v.z - mz; sxx += a * a; szz += b * b; sxz += a * b; });
+const axis = 0.5 * Math.atan2(2 * sxz, sxx - szz);   // angle of long axis in XZ (from +X toward +Z)
+
+function frameFit() {
+  const w = innerWidth, h = innerHeight; camera.aspect = w / h; camera.updateProjectionMatrix();
+  const portrait = h > w * 1.05;
+  const tilt = portrait ? 0.74 : 0.86;  // polar angle from vertical
+  // portrait: lake's long axis runs up the screen; landscape: across. Keep north roughly up.
+  let az = portrait ? Math.PI / 2 - axis : -axis;
+  if (Math.cos(az) < 0) az += Math.PI;
+  const cardB = document.getElementById('card').getBoundingClientRect().bottom;
+  const topN = 1 - 2 * (cardB + 16) / h, botN = portrait ? -1 + 2 * 92 / h : -0.84;
+  const leftN = -0.92, rightN = 0.92;
+  const target = new THREE.Vector3(mx, 0, mz);
+  const dir = new THREE.Vector3(Math.sin(tilt) * Math.sin(az), Math.cos(tilt), Math.sin(tilt) * Math.cos(az));
+  const tmp = new THREE.Vector3(), ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  const place = d => { camera.position.copy(target).addScaledVector(dir, d); camera.lookAt(target); camera.updateMatrixWorld(); };
+  const box = () => { let x0 = 9, x1 = -9, y0 = 9, y1 = -9; for (const v of samp) { tmp.copy(v).project(camera); x0 = Math.min(x0, tmp.x); x1 = Math.max(x1, tmp.x); y0 = Math.min(y0, tmp.y); y1 = Math.max(y1, tmp.y); } return [x0, x1, y0, y1]; };
+  const hit = (x, y) => { ray.setFromCamera(new THREE.Vector2(x, y), camera); const p = new THREE.Vector3(); return ray.ray.intersectPlane(plane, p) ? p : null; };
+  let dist = 30;
+  for (let it = 0; it < 5; it++) {
+    let lo = 1, hi = 150;
+    for (let b = 0; b < 24; b++) {
+      dist = (lo + hi) / 2; place(dist); const [x0, x1, y0, y1] = box();
+      if (x1 - x0 > rightN - leftN || y1 - y0 > topN - botN) lo = dist; else hi = dist;
+    }
+    dist = hi; place(dist); const [x0, x1, y0, y1] = box();
+    const pa = hit((x0 + x1) / 2, (y0 + y1) / 2), pb = hit((leftN + rightN) / 2, (topN + botN) / 2);
+    if (pa && pb) target.add(pa.sub(pb));
+  }
+  place(dist);
+  controls.target.copy(target); controls.update();
+  scene.fog.near = dist * 1.1; scene.fog.far = dist * 3;
+  dirty = true;
+}
+dirty = true;
+function resize() { renderer.setSize(innerWidth, innerHeight, false); }
+resize(); frameFit();
+addEventListener('resize', () => { resize(); frameFit(); });
+document.getElementById('bReset').onclick = frameFit;
+document.getElementById('bNorth').onclick = () => {
+  const off = camera.position.clone().sub(controls.target), r = Math.hypot(off.x, off.z);
+  camera.position.set(controls.target.x, camera.position.y, controls.target.z + r); controls.update(); dirty = true;
+};
+document.getElementById('bWater').onclick = () => { water.visible = !water.visible; document.getElementById('bWater').classList.toggle('on', !water.visible); dirty = true; };
+let tempMode = false;
+document.getElementById('bTemp').onclick = () => {
+  tempMode = !tempMode; if (tempMode && fishOn) setFish(false); water.material = waterMats[tempMode ? 1 : 0]; water.visible = true; contourGroup.visible = !tempMode;
+  document.getElementById('bTemp').classList.toggle('on', tempMode);
+  legendMode();
+  dirty = true;
+};
+if (QS.get('temp') === '1') document.getElementById('bTemp').click();
+controls.addEventListener('change', () => { dirty = true; const h = document.getElementById('hint'); h.style.opacity = 0; });
+setTimeout(() => document.getElementById('hint').style.opacity = 0, 5000);
+document.getElementById('loading').remove();
+
+const pv = new THREE.Vector3();
+const needle = document.getElementById('needle');
+function placePins() {
+  const az = Math.atan2(camera.position.x - controls.target.x, camera.position.z - controls.target.z);
+  needle.style.transformOrigin = "50% 50%"; needle.style.transform = `rotate(${az * 180 / Math.PI}deg)`;
+  const w = innerWidth, h = innerHeight;
+  for (const p of pins.concat(fishPins)) {
+    pv.copy(p.top).project(camera);
+    const vis = pv.z < 1 && Math.abs(pv.x) < 1.05 && Math.abs(pv.y) < 1.05;
+    p.el.style.opacity = vis ? 1 : 0; p.el.style.pointerEvents = vis ? 'auto' : 'none';
+    p.el.style.transform = `translate(${(pv.x + 1) / 2 * w}px,${(1 - pv.y) / 2 * h}px)`;
+  }
+}
+function loop() {
+  requestAnimationFrame(loop);
+  const moved = controls.update();
+  if (moved || dirty) { renderer.render(scene, camera); placePins(); dirty = false; }
+}
+// ---------- units (ft/°F <-> m/°C), remembered; the app passes ?units=metric|us ----------
+// (inserted by ops/viewer/patch_viewer.py into viewer.html for the app and the website)
+// ---------- fish today: chance per species, heat map on the water, fish icons at the best zones ----------
+const FISH_COL = { largemouth: '#2e8b57', spotted: '#6b8e23', smallmouth: '#8b6914', crappie: '#7b68ee', striped: '#4682b4', white_bass: '#5f9ea0',
+  walleye: '#d4a017', catfish: '#6d5c4b', trout: '#e9967a', lake_trout: '#708090', kokanee: '#cd5c5c', pike: '#556b2f', muskie: '#2f4f4f', perch: '#e1a32a', bluegill: '#1e90ff' };
+const FISH_SVG = c => `<svg viewBox="0 0 32 20" width="26" height="17"><path d="M2 10c4-6 12-8 18-5l6-4v18l-6-4C14 18 6 16 2 10z" fill="${c}" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8" cy="9" r="1.5" fill="#fff"/></svg>`;
+let FISH = null, fishOn = false, fishSel = null, fishPins = [], heatMesh = null;
+const b64u8 = s => { const b = atob(s), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; };
+FISH = await FISH_P;
+if (FISH && FISH.probe) {
+  const P = FISH.probe; P.ch = {};
+  for (const [k, v] of Object.entries(P.chance || {})) P.ch[k] = b64u8(v);
+}
+const fishLocked = sp => !unlocked && !(sp && sp.free);
+function chanceAtCell(r, c, spId) {
+  const P = FISH && FISH.probe; if (!P || !P.ch[spId]) return null;
+  const pr = Math.min(P.ny - 1, Math.floor(r / ny * P.ny)), pc = Math.min(P.nx - 1, Math.floor(c / nx * P.nx));
+  return P.ch[spId][pr * P.nx + pc] / 255;
+}
+const HEAT = [[0, [1, .96, .63]], [.35, [.996, .77, .31]], [.65, [.94, .42, .125]], [1, [.74, 0, .15]]];
+function heatColor(v) { return ramp(HEAT, v); }
+function buildHeat(spId) {
+  if (heatMesh) { scene.remove(heatMesh); heatMesh.geometry.dispose(); heatMesh = null; }
+  if (!spId || !FISH) return;
+  const g = water.geometry.clone(), p = g.getAttribute('position'), n = p.count, colA = new Float32Array(n * 4);
+  const P = FISH.probe, ch = P.ch[spId]; if (!ch) return;
+  const base = hex(0x2b86b0);
+  for (let i = 0; i < n; i++) {
+    const c = p.getX(i) / dx + (nx - 1) / 2, r = p.getZ(i) / dz + (ny - 1) / 2;
+    // bilinear sample of the tap grid
+    const fx = Math.max(0, Math.min(P.nx - 1.001, c / nx * P.nx - 0.5)), fy = Math.max(0, Math.min(P.ny - 1.001, r / ny * P.ny - 0.5));
+    const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0, at = (y, x) => ch[y * P.nx + x] / 255;
+    const v = (at(y0, x0) * (1 - tx) + at(y0, x0 + 1) * tx) * (1 - ty) + (at(y0 + 1, x0) * (1 - tx) + at(y0 + 1, x0 + 1) * tx) * ty;
+    const a = Math.min(0.92, v * 1.1), hc = heatColor(v);
+    for (let q = 0; q < 3; q++) colA[i * 4 + q] = Math.pow(base[q] * (1 - a) + hc[q] * a, 2.2);
+    colA[i * 4 + 3] = 0.35 + 0.6 * a;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(colA, 4));
+  heatMesh = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false }));
+  heatMesh.renderOrder = 10; scene.add(heatMesh); dirty = true;
+}
+function clearFishPins() { fishPins.forEach(p => { p.el.remove(); pinGroup.remove(p.ring); }); fishPins = []; }
+function placeFishPins(sp) {
+  clearFishPins(); if (!sp) return;
+  const lockedSp = fishLocked(sp);
+  sp.zones.forEach((z, k) => {
+    const lk = lockedSp || (!unlocked && k > 0);
+    const c = (z.lon - M.bounds[0]) / (M.bounds[2] - M.bounds[0]) * nx - 0.5, r = (M.bounds[3] - z.lat) / (M.bounds[3] - M.bounds[1]) * ny - 0.5;
+    const v = new THREE.Vector3(X(c), 0.05, Z(r));
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.085, 32), new THREE.MeshBasicMaterial({ color: lk ? 0xc5ced5 : new THREE.Color(FISH_COL[sp.id] || '#0f6fa8'), side: THREE.DoubleSide, transparent: true, opacity: .95, depthWrite: false }));
+    ring.rotation.x = -Math.PI / 2; ring.position.copy(v).setY(0.003); ring.renderOrder = 11; pinGroup.add(ring);
+    const el = document.createElement('button'); el.className = 'fpin' + (lk ? ' locked' : '');
+    el.innerHTML = lk ? LOCK : `${FISH_SVG(FISH_COL[sp.id] || '#0f6fa8')}<b>${z.pct}%</b>`;
+    el.setAttribute('aria-label', lk ? 'Locked fishing zone' : `${sp.name}: ${z.pct}% of them around here`);
+    el.onclick = ev => { ev.stopPropagation(); lk ? fishUpsell(sp) : openFishSheet(sp, k); };
+    document.body.appendChild(el);
+    fishPins.push({ el, top: v, ring });
+  });
+  dirty = true;
+}
+function fishChips() {
+  const box = document.getElementById('chips'); box.innerHTML = '';
+  if (!fishOn) { [[null, 'All fish'], ...SPECIES].forEach(([id, name]) => { const b = document.createElement('button'); b.className = 'chip' + (id === filter ? ' on' : ''); b.textContent = name; b.onclick = () => { filter = id; box.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b)); refreshPins(); if (active >= 0) { if (order.some(o => o.j === active)) openSheet(active); else closeSheet(); } }; box.appendChild(b); }); return; }
+  FISH.species.forEach(sp => {
+    const b = document.createElement('button'), lk = fishLocked(sp);
+    b.className = 'chip fchip' + (fishSel === sp.id ? ' on' : '');
+    b.innerHTML = `<i style="background:${FISH_COL[sp.id] || '#0f6fa8'}"></i>${sp.name} <b>${lk ? '🔒' : sp.chance + '%'}</b>`;
+    b.onclick = () => lk ? fishUpsell(sp) : selectFish(sp.id, true);
+    box.appendChild(b);
+  });
+}
+function selectFish(id, open) {
+  fishSel = id; const sp = FISH.species.find(s => s.id === id);
+  fishChips(); placeFishPins(sp);
+  if (unlocked) buildHeat(id); else buildHeat(null);
+  water.visible = !heatMesh; if (heatMesh) heatMesh.visible = true;
+  legendMode();
+  if (open) openFishSheet(sp, -1);
+}
+function openFishSheet(sp, k) {
+  active = -1;
+  const z = k >= 0 ? sp.zones[k] : null, Cn = FISH.conditions || {};
+  const zl = sp.zones.map((q, j) => (!unlocked && j > 0) ? '' : `<div class="fact"><i>${q.title}</i><b>${q.pct}% of them</b><small>${U.band(q.depth_ft)} deep${q.temp_f != null ? ' · about ' + U.t(q.temp_f) : ''}</small></div>`).join('');
+  sheet.innerHTML = `<div class="sh-head"><div class="num" style="background:${FISH_COL[sp.id] || '#0f6fa8'};color:#fff;width:auto;min-width:30px;padding:0 7px;border-radius:999px;font-size:12.5px">${sp.chance}%</div><h2>${sp.name}${z ? ' · ' + z.title : ''}</h2><span class="conf ${sp.chance >= 60 ? 'good' : 'fair'}">${sp.word === 'Good' ? 'Good chance' : sp.word === 'Fair' ? 'Fair chance' : 'Slow today'}</span><button class="x" aria-label="Close" onclick="window.__close()">×</button></div>
+  <div class="why">${sp.why.map(w => `<p>${U.text(w)}</p>`).join('')}</div>
+  <div class="facts">
+    <div class="fact"><i>Fish at</i><b>${U.band(sp.depth_ft)} deep</b><small>today</small></div>
+    ${sp.temp_at_depth_f != null ? `<div class="fact"><i>Water there</i><b>about ${U.t(sp.temp_at_depth_f)}</b><small>${Cn.surface_f != null ? U.t(Cn.surface_f) + ' on top' : ''}</small></div>` : ''}
+    ${zl}
+  </div>
+  ${unlocked ? '' : `<p class="pnote">Heat map and every zone for every fish: <a href="#" onclick="window.__fishUp();return false">LakeScope PRO</a></p>`}`;
+  sheet.scrollTop = 0; sheet.classList.add('show'); document.body.classList.add('sheet-open'); dirty = true;
+}
+function fishUpsell(sp) {
+  sheet.innerHTML = `<button class="x" style="position:absolute;right:12px;top:10px;z-index:2" aria-label="Close" onclick="window.__close()">×</button><div class="lockwrap"><div class="blurred" aria-hidden="true">${FISH.species[0] ? `<div class="sh-head"><div class="num">%</div><h2>${sp ? sp.name : 'Fish'}</h2></div><p class="sh-why">Where they are today, how deep and why.</p><div class="facts"><div class="fact"><i>Fish at</i><b>— ft</b></div><div class="fact"><i>Water</i><b>—</b></div></div>` : ''}</div>${upsellHTML()}</div>`;
+  sheet.querySelector('.upsell h3').textContent = `See where every fish is on ${M.name}`;
+  sheet.querySelector('.upsell p').textContent = 'Chance for every fish, the heat map and all the best zones, every day.';
+  sheet.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { if (window.ReactNativeWebView) post({ buy: b.dataset.buy, lake: LID }); else if (b.dataset.buy !== 'video' && window.LSPro) { const box = document.createElement('div'); box.className = 'webup'; sheet.appendChild(box); window.LSPro.upgrade(box, M.name); box.scrollIntoView({ block: 'nearest' }); } else toast('Unlock in the LakeScope app'); });
+  sheet.classList.add('show'); document.body.classList.add('sheet-open'); dirty = true;
+}
+window.__fishUp = () => fishUpsell(FISH.species.find(s => s.id === fishSel));
+function legendMode() {
+  const T = document.getElementById('lgT'), B = document.getElementById('lgB'), K = document.getElementById('lgK');
+  B.classList.toggle('heat', fishOn && !!heatMesh); B.classList.toggle('temp', !fishOn && tempMode);
+  if (fishOn && heatMesh) { T.textContent = 'Where the fish are today'; K.innerHTML = '<span>fewer</span><span>more</span>'; }
+  else if (tempMode) { const [a, b] = M.tempRange; T.textContent = `Water on top · ${when(C.tempDays)}`; K.innerHTML = `<span>${U.t(a)} cooler</span><span>warmer ${U.t(b)}</span>`; }
+  else { T.textContent = 'Depth today'; K.innerHTML = U.depthTicks(); }
+}
+function setFish(on) {
+  fishOn = on && !!(FISH && FISH.species && FISH.species.length);
+  document.getElementById('bFish').classList.toggle('on', fishOn);
+  pins.forEach(p => { p.el.style.display = fishOn ? 'none' : ''; p.stem.visible = p.ring.visible = !fishOn && !p.el.classList.contains('dim'); });
+  document.getElementById('plan').hidden = fishOn || unlocked;
+  if (fishOn) { if (tempMode) document.getElementById('bTemp').click(); selectFish(fishSel || FISH.species[0].id, false); }
+  else { clearFishPins(); buildHeat(null); water.visible = true; fishChips(); legendMode(); closeSheet(); }
+  dirty = true;
+}
+const bFish = document.getElementById('bFish');
+if (!FISH || !FISH.species || !FISH.species.length) bFish.style.display = 'none';
+bFish.onclick = () => setFish(!fishOn);
+const _unlock0 = window.__unlock;
+window.__unlock = () => { _unlock0(); if (fishOn) selectFish(fishSel, false); };
+
+// ---------- tap anywhere on the lake: depth + water temperature (+ fish chance) at that point ----------
+const probeEl = document.getElementById('probe');
+let tapMark = null, lastTap = null;
+function showProbe(r, c) {
+  const i = r * nx + c;
+  if (!wet[i]) { probeEl.classList.remove('show'); if (tapMark) tapMark.visible = false; dirty = true; return; }
+  lastTap = [r, c];
+  const depthFt = Math.max(0, -H[i] / 10 * 3.28084);
+  const [a, b] = M.tempRange, tF = (C.tempF != null && T8[i]) ? a + (T8[i] - 1) / 254 * (b - a) : null;
+  let fishLine = '';
+  if (FISH && FISH.species && FISH.species.length) {
+    const sp = FISH.species.find(s => s.id === fishSel) || FISH.species[0];
+    if (!fishLocked(sp)) {
+      const v = chanceAtCell(r, c, sp.id);
+      if (v != null) { const w = v >= 0.6 ? 'Good spot' : v >= 0.3 ? 'Fair spot' : 'Few here'; fishLine = `<div><i>${sp.name}</i><b>${w}</b><span class="bar"><span style="width:${Math.round(v * 100)}%"></span></span></div>`; }
+    }
+  }
+  probeEl.innerHTML = `<button class="x" aria-label="Close" onclick="window.__probeClose()">×</button>
+    <div><i>Depth here</i><b>about ${U.d(depthFt)}</b></div>
+    ${tF != null ? `<div><i>Water on top</i><b>about ${U.t(tF)}</b></div>` : ''}
+    ${fishLine}`;
+  probeEl.classList.add('show');
+  if (!tapMark) { tapMark = new THREE.Mesh(new THREE.RingGeometry(0.035, 0.06, 32), new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: .95, depthWrite: false })); tapMark.rotation.x = -Math.PI / 2; tapMark.renderOrder = 13; scene.add(tapMark); }
+  tapMark.position.set(X(c), 0.004, Z(r)); tapMark.visible = true; dirty = true;
+  post({ probe: { depth_ft: Math.round(depthFt), temp_f: tF != null ? Math.round(tF) : null } });
+}
+window.__probeClose = () => { probeEl.classList.remove('show'); if (tapMark) tapMark.visible = false; lastTap = null; dirty = true; };
+{
+  let down = null;
+  canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, t: performance.now(), n: e.isPrimary }; });
+  canvas.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 7 || performance.now() - down.t > 450) { down = null; return; }
+    down = null;
+    const ray = new THREE.Raycaster(); ray.setFromCamera(new THREE.Vector2(e.clientX / innerWidth * 2 - 1, 1 - e.clientY / innerHeight * 2), camera);
+    const hit = ray.intersectObject(terrain, false)[0]; if (!hit) return;
+    const c = Math.round(hit.point.x / dx + (nx - 1) / 2), r = Math.round(hit.point.z / dz + (ny - 1) / 2);
+    if (r < 0 || c < 0 || r >= ny || c >= nx) return;
+    showProbe(r, c);
+  });
+}
+// units button
+const bUnits = document.getElementById('bUnits');
+function applyUnits() {
+  bUnits.textContent = U.metric ? 'm' : 'ft'; bUnits.setAttribute('aria-label', U.metric ? 'Show feet and °F' : 'Show metres and °C');
+  renderTop(); legendMode();
+  if (fishOn && sheet.classList.contains('show')) { const sp = FISH.species.find(s => s.id === fishSel); if (sp && !fishLocked(sp)) openFishSheet(sp, -1); }
+  else if (active >= 0) openSheet(active);
+  if (lastTap) showProbe(lastTap[0], lastTap[1]);
+}
+bUnits.onclick = () => { U.set(!U.metric); applyUnits(); post({ units: U.metric ? 'metric' : 'us' }); };
+applyUnits();
+if (QS.get('fish') === '1') setFish(true);
+
+loop();
+window.__ready = true;
+window.__dbg = { camera, controls, setDirty: () => { dirty = true; }, openSheet, setFish, showProbe, U };
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+ "schema": 1,
+ "generated_utc": "2026-11-14T09:41Z",
+ "published_utc": "2026-11-14T09:41Z",
+ "lakes": 101,
+ "bytes": 179427327,
+ "min_app": "0.1",
+ "coverage": {
+  "level": 64,
+  "clarity": 90,
+  "temperature": 99,
+  "weather": 101,
+  "mesh": 101,
+  "depth": 27,
+  "spots": 101,
+  "fishing_days_max": 7
+ },
+ "about": "Water levels: USGS gauges, Bureau of Reclamation, U.S. Army Corps of Engineers, NOAA water-level stations, California DWR, LCRA. Weather: National Weather Service. Water temperature: NASA MODIS Terra and Aqua (daily, 1 km) and USGS/NASA Landsat 8-9. Clarity, algae and ice: Copernicus Sentinel-2. Satellite data read from Microsoft Planetary Computer. Lake bed: GLOBathy (CC0) and USGS 3DEP / Copernicus GLO-30 terrain. Outlines: HydroLAKES (CC BY 4.0). Ramps: OpenStreetMap contributors (ODbL). Map: OpenFreeMap. Ice thickness: LakeScope ice model (lake heat budget, Stefan ice growth under snow, snow-ice, spring melt) driven by NOAA RCC-ACIS daily temperature and precipitation, NOAA NCEI daily wind and the National Weather Service forecast, corrected by the satellite ice and water-temperature views."
+}
