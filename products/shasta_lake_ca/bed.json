@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 517,
+  "mean_ft": 153,
+  "src": "USBR; 4,552,000 acre-ft / 29,740 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 44.8,
+   "power": 0.68,
+   "mean_m": 39.83,
+   "target_mean_m": 39.81,
+   "grid_max_m": 143.93
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 44.8,
+   "power": 0.643,
+   "mean_m": 39.78,
+   "target_mean_m": 39.81,
+   "grid_max_m": 143.93
+  }
+ },
+ "max_ft_fine": 472,
+ "max_ft_coarse": 472,
+ "p995_ft_coarse": 472,
+ "published_max_ft": 517,
+ "generated_utc": "2026-11-16T11:02Z"
+}

@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth",
+ "ref": {
+  "max_ft": 155,
+  "mean_ft": null,
+  "src": "Alabama Power"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 8.7,
+   "power": 1.0,
+   "mean_m": 8.09,
+   "target_mean_m": null,
+   "grid_max_m": 44.6
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 8.7,
+   "power": 1.0,
+   "mean_m": 7.57,
+   "target_mean_m": null,
+   "grid_max_m": 44.6
+  }
+ },
+ "max_ft_fine": 146,
+ "max_ft_coarse": 146,
+ "p995_ft_coarse": 146,
+ "published_max_ft": 155,
+ "generated_utc": "2026-11-16T11:02Z"
+}

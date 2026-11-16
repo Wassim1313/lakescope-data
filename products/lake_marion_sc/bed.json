@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 77,
+  "mean_ft": 13,
+  "src": "SC DNR (76.8 ft, mean 13.1 ft)"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.438,
+   "mean_m": 3.96,
+   "target_mean_m": 3.96,
+   "grid_max_m": 23.47
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.363,
+   "mean_m": 3.96,
+   "target_mean_m": 3.96,
+   "grid_max_m": 23.47
+  }
+ },
+ "max_ft_fine": 77,
+ "max_ft_coarse": 77,
+ "p995_ft_coarse": 77,
+ "published_max_ft": 77,
+ "generated_utc": "2026-11-16T11:02Z"
+}

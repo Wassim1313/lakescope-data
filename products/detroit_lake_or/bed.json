@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 440,
+  "mean_ft": 130,
+  "src": "USACE Portland District; 455,000 acre-ft / 3,500 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.824,
+   "mean_m": 39.64,
+   "target_mean_m": 39.62,
+   "grid_max_m": 134.11
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.891,
+   "mean_m": 39.61,
+   "target_mean_m": 39.62,
+   "grid_max_m": 134.11
+  }
+ },
+ "max_ft_fine": 440,
+ "max_ft_coarse": 440,
+ "p995_ft_coarse": 440,
+ "published_max_ft": 440,
+ "generated_utc": "2026-11-16T11:02Z"
+}

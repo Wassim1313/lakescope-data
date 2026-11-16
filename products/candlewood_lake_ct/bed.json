@@ -1,0 +1,46 @@
+{
+ "status": "ok",
+ "kind": "survey",
+ "source": "ct_deep",
+ "licence": "CC0",
+ "credit": "Connecticut DEEP: Lake Bathymetry Contours",
+ "info": {
+  "fine": {
+   "coverage": 1.0,
+   "levels_m": [
+    3.05,
+    6.1,
+    9.14,
+    12.19,
+    15.24,
+    18.29,
+    21.34,
+    24.38
+   ],
+   "deepest_contour_m": 24.38,
+   "n_lines": 538,
+   "grid_max_m": 27.43
+  },
+  "coarse": {
+   "coverage": 1.0,
+   "levels_m": [
+    3.05,
+    6.1,
+    9.14,
+    12.19,
+    15.24,
+    18.29,
+    21.34,
+    24.38
+   ],
+   "deepest_contour_m": 24.38,
+   "n_lines": 538,
+   "grid_max_m": 27.43
+  }
+ },
+ "max_ft_fine": 90,
+ "max_ft_coarse": 90,
+ "p995_ft_coarse": 89,
+ "published_max_ft": 90,
+ "generated_utc": "2026-11-16T09:49Z"
+}

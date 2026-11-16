@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 349,
+  "mean_ft": 77,
+  "src": "Salt River Project; 1,653,043 acre-ft / 21,493 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.991,
+   "mean_m": 23.48,
+   "target_mean_m": 23.47,
+   "grid_max_m": 106.38
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.008,
+   "mean_m": 23.47,
+   "target_mean_m": 23.47,
+   "grid_max_m": 106.38
+  }
+ },
+ "max_ft_fine": 349,
+ "max_ft_coarse": 349,
+ "p995_ft_coarse": 348,
+ "published_max_ft": 349,
+ "generated_utc": "2026-11-16T11:02Z"
+}

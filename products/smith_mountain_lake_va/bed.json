@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 250,
+  "mean_ft": 55,
+  "src": "Appalachian Power / VA DWR"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 4.6,
+   "power": 0.832,
+   "mean_m": 16.06,
+   "target_mean_m": 16.06,
+   "grid_max_m": 74.79
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 4.6,
+   "power": 0.77,
+   "mean_m": 16.05,
+   "target_mean_m": 16.06,
+   "grid_max_m": 74.79
+  }
+ },
+ "max_ft_fine": 245,
+ "max_ft_coarse": 245,
+ "p995_ft_coarse": 245,
+ "published_max_ft": 250,
+ "generated_utc": "2026-11-16T11:02Z"
+}

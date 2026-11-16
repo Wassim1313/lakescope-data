@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 618,
+  "mean_ft": 301,
+  "src": "NYS DEC / Hobart and William Smith Colleges; 15.9 km3 / 173 km2"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.674,
+   "mean_m": 91.78,
+   "target_mean_m": 91.74,
+   "grid_max_m": 188.37
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.705,
+   "mean_m": 91.72,
+   "target_mean_m": 91.74,
+   "grid_max_m": 188.37
+  }
+ },
+ "max_ft_fine": 618,
+ "max_ft_coarse": 618,
+ "p995_ft_coarse": 618,
+ "published_max_ft": 618,
+ "generated_utc": "2026-11-16T11:02Z"
+}

@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 220,
+  "mean_ft": 71,
+  "src": "Idaho DEQ; 2,260,000 acre-ft / 31,870 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.845,
+   "mean_m": 21.63,
+   "target_mean_m": 21.64,
+   "grid_max_m": 67.06
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.795,
+   "mean_m": 21.64,
+   "target_mean_m": 21.64,
+   "grid_max_m": 67.06
+  }
+ },
+ "max_ft_fine": 220,
+ "max_ft_coarse": 220,
+ "p995_ft_coarse": 220,
+ "published_max_ft": 220,
+ "generated_utc": "2026-11-16T11:02Z"
+}

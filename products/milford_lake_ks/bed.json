@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 65,
+  "mean_ft": 25,
+  "src": "USACE Kansas City District; 388,000 acre-ft / 15,700 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.601,
+   "mean_m": 7.62,
+   "target_mean_m": 7.62,
+   "grid_max_m": 19.81
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.573,
+   "mean_m": 7.62,
+   "target_mean_m": 7.62,
+   "grid_max_m": 19.81
+  }
+ },
+ "max_ft_fine": 65,
+ "max_ft_coarse": 65,
+ "p995_ft_coarse": 65,
+ "published_max_ft": 65,
+ "generated_utc": "2026-11-16T11:02Z"
+}

@@ -1,0 +1,60 @@
+{
+ "status": "ok",
+ "kind": "survey",
+ "source": "ma_dwsp",
+ "licence": "Public data provided as is (MA DCR Division of Water Supply Protection)",
+ "credit": "MA DCR DWSP: Quabbin Reservoir Bathymetry Contour Lines",
+ "info": {
+  "fine": {
+   "coverage": 1.0,
+   "levels_m": [
+    3.05,
+    6.1,
+    9.14,
+    12.19,
+    15.24,
+    18.29,
+    21.34,
+    24.38,
+    27.43,
+    30.48,
+    33.53,
+    36.58,
+    39.62,
+    42.67,
+    45.72
+   ],
+   "deepest_contour_m": 45.72,
+   "n_lines": 6260,
+   "grid_max_m": 44.2
+  },
+  "coarse": {
+   "coverage": 1.0,
+   "levels_m": [
+    3.05,
+    6.1,
+    9.14,
+    12.19,
+    15.24,
+    18.29,
+    21.34,
+    24.38,
+    27.43,
+    30.48,
+    33.53,
+    36.58,
+    39.62,
+    42.67,
+    45.72
+   ],
+   "deepest_contour_m": 45.72,
+   "n_lines": 6260,
+   "grid_max_m": 42.67
+  }
+ },
+ "max_ft_fine": 145,
+ "max_ft_coarse": 140,
+ "p995_ft_coarse": 135,
+ "published_max_ft": 151,
+ "generated_utc": "2026-11-16T09:49Z"
+}

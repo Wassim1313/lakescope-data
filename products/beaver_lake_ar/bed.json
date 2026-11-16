@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth",
+ "ref": {
+  "max_ft": 200,
+  "mean_ft": null,
+  "src": "USACE Little Rock"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.0,
+   "mean_m": 14.29,
+   "target_mean_m": null,
+   "grid_max_m": 60.96
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.0,
+   "mean_m": 12.92,
+   "target_mean_m": null,
+   "grid_max_m": 60.96
+  }
+ },
+ "max_ft_fine": 200,
+ "max_ft_coarse": 200,
+ "p995_ft_coarse": 200,
+ "published_max_ft": 200,
+ "generated_utc": "2026-11-16T11:02Z"
+}

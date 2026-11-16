@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth",
+ "ref": {
+  "max_ft": 310,
+  "mean_ft": null,
+  "src": "NPS Curecanti / USBR"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.0,
+   "mean_m": 22.18,
+   "target_mean_m": null,
+   "grid_max_m": 94.49
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.0,
+   "mean_m": 21.39,
+   "target_mean_m": null,
+   "grid_max_m": 94.49
+  }
+ },
+ "max_ft_fine": 310,
+ "max_ft_coarse": 310,
+ "p995_ft_coarse": 310,
+ "published_max_ft": 310,
+ "generated_utc": "2026-11-16T11:02Z"
+}

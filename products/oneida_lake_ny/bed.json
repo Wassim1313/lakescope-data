@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 55,
+  "mean_ft": 22,
+  "src": "NYS DEC / Cornell Biological Field Station"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.903,
+   "mean_m": 6.7,
+   "target_mean_m": 6.71,
+   "grid_max_m": 16.76
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.858,
+   "mean_m": 6.71,
+   "target_mean_m": 6.71,
+   "grid_max_m": 16.76
+  }
+ },
+ "max_ft_fine": 55,
+ "max_ft_coarse": 55,
+ "p995_ft_coarse": 55,
+ "published_max_ft": 55,
+ "generated_utc": "2026-11-16T11:02Z"
+}

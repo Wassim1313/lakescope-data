@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 145,
+  "mean_ft": 31,
+  "src": "USACE Mobile District (44.2 m); 367,500 acre-ft / 12,010 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.254,
+   "mean_m": 9.45,
+   "target_mean_m": 9.45,
+   "grid_max_m": 44.2
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 1.207,
+   "mean_m": 9.45,
+   "target_mean_m": 9.45,
+   "grid_max_m": 44.2
+  }
+ },
+ "max_ft_fine": 145,
+ "max_ft_coarse": 145,
+ "p995_ft_coarse": 145,
+ "published_max_ft": 145,
+ "generated_utc": "2026-11-16T11:02Z"
+}

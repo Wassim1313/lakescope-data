@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 246,
+  "mean_ft": 56,
+  "src": "Maine DIFW; 4,210,000 acre-ft / 75,451 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 1.093,
+   "mean_m": 17.07,
+   "target_mean_m": 17.07,
+   "grid_max_m": 74.98
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 1.028,
+   "mean_m": 17.07,
+   "target_mean_m": 17.07,
+   "grid_max_m": 74.98
+  }
+ },
+ "max_ft_fine": 246,
+ "max_ft_coarse": 246,
+ "p995_ft_coarse": 245,
+ "published_max_ft": 246,
+ "generated_utc": "2026-11-16T11:02Z"
+}

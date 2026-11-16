@@ -1,0 +1,22 @@
+{
+ "status": "ok",
+ "kind": "survey",
+ "source": "ncei",
+ "licence": "Public domain (U.S. Government work)",
+ "credit": "NOAA National Centers for Environmental Information: DEM global mosaic",
+ "info": {
+  "fine": {
+   "coverage": 1.0,
+   "grid_max_m": 29.22
+  },
+  "coarse": {
+   "coverage": 1.0,
+   "grid_max_m": 13.96
+  }
+ },
+ "max_ft_fine": 96,
+ "max_ft_coarse": 46,
+ "p995_ft_coarse": 17,
+ "published_max_ft": 65,
+ "generated_utc": "2026-11-16T09:50Z"
+}

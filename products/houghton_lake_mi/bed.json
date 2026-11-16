@@ -1,0 +1,64 @@
+{
+ "status": "ok",
+ "kind": "survey",
+ "source": "mi_dnr",
+ "licence": "Public record, no restrictions on use, reproduction or distribution (State of Michigan open data terms)",
+ "credit": "Michigan Department of Natural Resources, Institute for Fisheries Research: Inland Lake Contours",
+ "info": {
+  "fine": {
+   "coverage": 0.969,
+   "levels_m": [
+    0.61,
+    0.91,
+    1.22,
+    1.52,
+    1.83,
+    2.13,
+    2.44,
+    2.74,
+    3.05,
+    3.35,
+    3.66,
+    4.57,
+    4.88,
+    5.18,
+    6.1,
+    6.4
+   ],
+   "deepest_contour_m": 6.4,
+   "n_lines": 72,
+   "grid_max_m": 6.39,
+   "gap_filled_share": 0.031
+  },
+  "coarse": {
+   "coverage": 0.974,
+   "levels_m": [
+    0.61,
+    0.91,
+    1.22,
+    1.52,
+    1.83,
+    2.13,
+    2.44,
+    2.74,
+    3.05,
+    3.35,
+    3.66,
+    4.57,
+    4.88,
+    5.18,
+    6.1,
+    6.4
+   ],
+   "deepest_contour_m": 6.4,
+   "n_lines": 72,
+   "grid_max_m": 6.3,
+   "gap_filled_share": 0.026
+  }
+ },
+ "max_ft_fine": 21,
+ "max_ft_coarse": 21,
+ "p995_ft_coarse": 19,
+ "published_max_ft": 22,
+ "generated_utc": "2026-11-16T09:49Z"
+}

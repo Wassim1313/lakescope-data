@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth",
+ "ref": {
+  "max_ft": 583,
+  "mean_ft": null,
+  "src": "USBR"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 86.5,
+   "power": 1.0,
+   "mean_m": 34.56,
+   "target_mean_m": null,
+   "grid_max_m": 151.34
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 86.5,
+   "power": 1.0,
+   "mean_m": 32.28,
+   "target_mean_m": null,
+   "grid_max_m": 151.34
+  }
+ },
+ "max_ft_fine": 497,
+ "max_ft_coarse": 497,
+ "p995_ft_coarse": 496,
+ "published_max_ft": 583,
+ "generated_utc": "2026-11-16T11:02Z"
+}

@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 690,
+  "mean_ft": 224,
+  "src": "CA DWR; 3,537,577 acre-ft / 15,810 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 225.1,
+   "power": 0.844,
+   "mean_m": 34.0,
+   "target_mean_m": 33.98,
+   "grid_max_m": 141.72
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 225.1,
+   "power": 0.737,
+   "mean_m": 34.0,
+   "target_mean_m": 33.98,
+   "grid_max_m": 141.72
+  }
+ },
+ "max_ft_fine": 465,
+ "max_ft_coarse": 465,
+ "p995_ft_coarse": 465,
+ "published_max_ft": 690,
+ "generated_utc": "2026-11-16T11:02Z"
+}

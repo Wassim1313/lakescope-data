@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 1150,
+  "mean_ft": 466,
+  "src": "USGS; 53.9 km3 / 380 km2"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.638,
+   "mean_m": 141.98,
+   "target_mean_m": 142.04,
+   "grid_max_m": 350.52
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.583,
+   "mean_m": 142.08,
+   "target_mean_m": 142.04,
+   "grid_max_m": 350.52
+  }
+ },
+ "max_ft_fine": 1150,
+ "max_ft_coarse": 1150,
+ "p995_ft_coarse": 1150,
+ "published_max_ft": 1150,
+ "generated_utc": "2026-11-16T11:02Z"
+}

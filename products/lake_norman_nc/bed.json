@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 110,
+  "mean_ft": 34,
+  "src": "Duke Energy (max 110 ft, mean 33.5 ft)"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.673,
+   "mean_m": 10.37,
+   "target_mean_m": 10.36,
+   "grid_max_m": 33.53
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.652,
+   "mean_m": 10.36,
+   "target_mean_m": 10.36,
+   "grid_max_m": 33.53
+  }
+ },
+ "max_ft_fine": 110,
+ "max_ft_coarse": 110,
+ "p995_ft_coarse": 110,
+ "published_max_ft": 110,
+ "generated_utc": "2026-11-16T11:02Z"
+}

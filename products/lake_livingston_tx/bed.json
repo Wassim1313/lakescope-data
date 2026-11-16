@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 90,
+  "mean_ft": 21,
+  "src": "Trinity River Authority / TWDB 2019 survey"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 1.4,
+   "power": 1.691,
+   "mean_m": 6.18,
+   "target_mean_m": 6.18,
+   "grid_max_m": 26.99
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 1.4,
+   "power": 1.684,
+   "mean_m": 6.18,
+   "target_mean_m": 6.18,
+   "grid_max_m": 26.99
+  }
+ },
+ "max_ft_fine": 89,
+ "max_ft_coarse": 89,
+ "p995_ft_coarse": 89,
+ "published_max_ft": 90,
+ "generated_utc": "2026-11-16T11:02Z"
+}

@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 316,
+  "mean_ft": 106,
+  "src": "Maine DEP / Portland Water District; 3,224,233 acre-ft / 30,513 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.779,
+   "mean_m": 32.3,
+   "target_mean_m": 32.31,
+   "grid_max_m": 96.32
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.741,
+   "mean_m": 32.3,
+   "target_mean_m": 32.31,
+   "grid_max_m": 96.32
+  }
+ },
+ "max_ft_fine": 316,
+ "max_ft_coarse": 316,
+ "p995_ft_coarse": 316,
+ "published_max_ft": 316,
+ "generated_utc": "2026-11-16T11:02Z"
+}

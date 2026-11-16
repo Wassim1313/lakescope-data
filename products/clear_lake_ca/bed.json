@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 60,
+  "mean_ft": 26.5,
+  "src": "Lake County CA; volume 1,155,000 acre-ft / 43,500 acres"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.569,
+   "mean_m": 8.08,
+   "target_mean_m": 8.08,
+   "grid_max_m": 18.29
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 0.547,
+   "mean_m": 8.08,
+   "target_mean_m": 8.08,
+   "grid_max_m": 18.29
+  }
+ },
+ "max_ft_fine": 60,
+ "max_ft_coarse": 60,
+ "p995_ft_coarse": 60,
+ "published_max_ft": 60,
+ "generated_utc": "2026-11-16T11:02Z"
+}

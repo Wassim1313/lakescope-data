@@ -1,0 +1,66 @@
+{
+ "status": "ok",
+ "kind": "survey",
+ "source": "fl_fwc",
+ "licence": "Public data; acknowledgement of FWC-FWRI appreciated (docs only)",
+ "credit": "FWC Fish and Wildlife Research Institute: Bathymetry of Select Lakes in Florida",
+ "info": {
+  "fine": {
+   "coverage": 0.999,
+   "levels_m": [
+    0.3,
+    0.61,
+    0.91,
+    1.22,
+    1.52,
+    1.83,
+    2.13,
+    2.44,
+    2.74,
+    3.05,
+    3.35,
+    3.66,
+    3.96,
+    4.27,
+    4.57,
+    4.88,
+    5.18
+   ],
+   "deepest_contour_m": 5.18,
+   "n_lines": 180,
+   "grid_max_m": 5.33,
+   "gap_filled_share": 0.001
+  },
+  "coarse": {
+   "coverage": 1.0,
+   "levels_m": [
+    0.3,
+    0.61,
+    0.91,
+    1.22,
+    1.52,
+    1.83,
+    2.13,
+    2.44,
+    2.74,
+    3.05,
+    3.35,
+    3.66,
+    3.96,
+    4.27,
+    4.57,
+    4.88,
+    5.18
+   ],
+   "deepest_contour_m": 5.18,
+   "n_lines": 180,
+   "grid_max_m": 5.18,
+   "gap_filled_share": 0.0
+  }
+ },
+ "max_ft_fine": 18,
+ "max_ft_coarse": 17,
+ "p995_ft_coarse": 16,
+ "published_max_ft": 15,
+ "generated_utc": "2026-11-16T09:50Z"
+}

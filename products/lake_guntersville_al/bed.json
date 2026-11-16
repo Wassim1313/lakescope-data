@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 60,
+  "mean_ft": 15,
+  "src": "TVA"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 2.2,
+   "power": 0.843,
+   "mean_m": 4.24,
+   "target_mean_m": 4.24,
+   "grid_max_m": 17.62
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 2.2,
+   "power": 0.807,
+   "mean_m": 4.24,
+   "target_mean_m": 4.24,
+   "grid_max_m": 17.62
+  }
+ },
+ "max_ft_fine": 58,
+ "max_ft_coarse": 58,
+ "p995_ft_coarse": 58,
+ "published_max_ft": 60,
+ "generated_utc": "2026-11-16T11:02Z"
+}

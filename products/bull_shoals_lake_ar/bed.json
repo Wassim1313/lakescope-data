@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 210,
+  "mean_ft": 67,
+  "src": "USACE Little Rock; 3,048,000 acre-ft / 45,440 acres at conservation pool"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.4,
+   "power": 0.601,
+   "mean_m": 20.35,
+   "target_mean_m": 20.36,
+   "grid_max_m": 63.89
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.4,
+   "power": 0.64,
+   "mean_m": 20.36,
+   "target_mean_m": 20.36,
+   "grid_max_m": 63.89
+  }
+ },
+ "max_ft_fine": 210,
+ "max_ft_coarse": 210,
+ "p995_ft_coarse": 209,
+ "published_max_ft": 210,
+ "generated_utc": "2026-11-16T11:02Z"
+}

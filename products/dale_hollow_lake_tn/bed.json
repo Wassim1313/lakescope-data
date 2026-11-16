@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 130,
+  "mean_ft": 50,
+  "src": "USACE Nashville District / TWRA"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.497,
+   "mean_m": 15.25,
+   "target_mean_m": 15.24,
+   "grid_max_m": 39.62
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": true,
+   "below_full_pool_ft": 0.0,
+   "power": 0.474,
+   "mean_m": 15.25,
+   "target_mean_m": 15.24,
+   "grid_max_m": 39.62
+  }
+ },
+ "max_ft_fine": 130,
+ "max_ft_coarse": 130,
+ "p995_ft_coarse": 130,
+ "published_max_ft": 130,
+ "generated_utc": "2026-11-16T11:02Z"
+}

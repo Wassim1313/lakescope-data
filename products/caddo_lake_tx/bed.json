@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "kind": "model",
+ "source": "published depth + volume",
+ "ref": {
+  "max_ft": 27,
+  "mean_ft": 4.8,
+  "src": "LDWF Caddo Lake management plan 2023"
+ },
+ "info": {
+  "fine": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 1.48,
+   "mean_m": 1.46,
+   "target_mean_m": 1.46,
+   "grid_max_m": 8.23
+  },
+  "coarse": {
+   "base": "globathy",
+   "along_dam": false,
+   "below_full_pool_ft": 0.0,
+   "power": 1.341,
+   "mean_m": 1.46,
+   "target_mean_m": 1.46,
+   "grid_max_m": 8.23
+  }
+ },
+ "max_ft_fine": 27,
+ "max_ft_coarse": 27,
+ "p995_ft_coarse": 27,
+ "published_max_ft": 27,
+ "generated_utc": "2026-11-16T11:02Z"
+}
